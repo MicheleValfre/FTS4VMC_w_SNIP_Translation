@@ -6,7 +6,7 @@ $(function(){
     var full_show = [$("#disambiguate"), $("#fopt"), $("#hdd"), 
         $("#full"), $("#hdead"), $("#delete"), $("#stop"),
         $("#fts"), $("#verify_properties"), $("#mts"), $("#download"),
-        $("#property_text_area")
+        $("#property_text_area"), $("#translate_to_pml")
     ];
     var stop_show = [$("#full"), $("#hdead"), $("#mts"),
         $("#delete"), $("#fts"), $("#download")];
@@ -42,6 +42,7 @@ $(function(){
         {url: '/remove_dead_hidden', name:'hdd', success:update_textarea_graph}, 
         solve);
     $("aside").on("click", "#verify_properties", verify_property);
+    $("aside").on("click", "#translate_to_pml", {url: '/translate_to_pml', success:update_textarea}, command);
     $("aside").on("click", "#show_explanation", show_counter_graph);
     $("aside").on("click", "#apply", apply_transform);
     $("body").on("click", "#mconfirm", {url: '/hdead_analysis', 
@@ -241,6 +242,7 @@ function command(event)
                 $("#source").text(response['graph']);
                 $("#tmp-source").val(response['mts']);
             }
+            $("#translate_to_pml").prop("disabled", false);
             $("#message").text("");
             $("#modal").hide();
         };

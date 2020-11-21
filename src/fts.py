@@ -405,9 +405,9 @@ def show_counter_graph():
     if sessions.check_session():
         try:
             vmc, t = get_vmc()
-            clean_counter = vmc.clean_counterexample()
             if not vmc._is_formula():
                 return {"text": 'The formula is not valid, no counter example available'}, 200
+            clean_counter = vmc.clean_counterexample()
             if not clean_counter:
                 if vmc.get_eval() == 'FALSE':
                     return {"explanation": vmc.get_explanation()}
@@ -428,3 +428,14 @@ def show_counter_graph():
         except Exception as e:
             print(str(e))
             return {"text": "An error occured"}, 400
+
+@app.route('/translate_to_pml', methods=['POST'])
+def translate_to_pml():
+    if sessions.check_session():
+        t = Translator()
+        print('mdoasdoiajsodij')
+        print(session['model'])
+        t.load_model(session['model'])
+        return {"text": t.translate_to_pml()}, 200
+            
+            

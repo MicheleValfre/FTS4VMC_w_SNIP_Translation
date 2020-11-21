@@ -87,3 +87,28 @@ class Translator:
         if out_file:
             with open(out_file,'wb') as of:
                 of.write(svg_graph)
+
+    #SNIP
+    def translate_to_pml(self):
+        act_state = '\nmtype action\n\nint state\n'
+        mtype = 'mtype = {no_action'
+        macros = '\n'
+        init = '\ninit{\n    action=no_action;\n    state=' + self.__fts._initial._id + \
+               ';\n    do\n'
+        if self.__fts == None:
+            return 'Nothing to show: no fts has been loaded'
+        for trans in self.__fts._transitions:
+            pml_label = self.sanitize_label(trans._label) + '_action'
+
+            mtype += ', ' + pml_label
+
+            macros += '#define ' + trans._label.upper() + '(action =='+ pml_label  +')\n'
+
+            init += '    ::state==' + trans._in._id + ' -> action = ' + pml_label + ';state = ' + \
+                    trans._out._id + ';\n'
+        
+        init += 'od;\n};\n'
+
+        mtype += '}\n'
+        print(mtype + act_state + macros + init)  
+        return mtype + act_state + macros + init 
