@@ -1,0 +1,27 @@
+1 = pay(may).2 +
+	free(may).3
+
+2 = change(must).3
+
+3 = cancel(may).4 +
+	soda(may).5 +
+	tea(may).6
+
+4 = return(must).1
+
+5 = serveSoda(must).7
+
+6 = serveTea(must).7
+
+7 = take(may).1 +
+	open(may).8
+
+8 = take(must).9
+
+9 = close(must).1
+
+
+SYS = 1
+
+Constraints { LIVE }
+

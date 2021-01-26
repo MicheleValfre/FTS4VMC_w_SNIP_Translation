@@ -1,0 +1,42 @@
+0 = insertBev_Euro_(may).1 +
+	insertBev_Dollar_(may).1
+
+1 = cancelBev(may).0 +
+	no_sugar(must).3 +
+	sugar(must).2
+
+2 = tea(may).5 +
+	coffee(must).6 +
+	cappuccino(may).4
+
+3 = coffee(must).7 +
+	cappuccino(may).9 +
+	tea(may).8
+
+6 = pour_sugar(must).7
+
+5 = pour_sugar(must).8
+
+4 = pour_sugar(must).9
+
+9 = pour_coffee(must).10 +
+	pour_milk(must).11
+
+8 = pour_tea(must).12
+
+7 = pour_coffee(must).12
+
+11 = pour_coffee(must).12
+
+10 = pour_milk(must).12
+
+12 = skip(may).13 +
+	ring(may).13
+
+13 = take_cup(must).0
+
+
+SYS = 0
+
+Constraints { LIVE }
+

@@ -112,3 +112,6 @@ From the root directory of FTS4VMC use the following command to launch all tests
 $ pip3 install pytest
 $ pytest 
 ```
+
+## Translation examples ##
+Inside the 'translation\_examples' folder you can find some samples of FTS written in .dot format, along with the translations to the format accepted by VMC and to the Promela language.

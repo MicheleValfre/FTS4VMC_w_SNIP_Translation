@@ -1,0 +1,46 @@
+0 = insertSoup_Euro_(may).1 +
+	insertSoup_Dollar_(may).1
+
+1 = cancelSoup(may).0 +
+	pea(may).6 +
+	tomato(may).2 +
+	chicken(may).4
+
+2 = no_cup(may).3 +
+	cup_present(may).8 +
+	skip(may).8
+
+4 = no_cup(may).5 +
+	skip(may).9 +
+	cup_present(may).9
+
+6 = skip(may).10 +
+	no_cup(may).7 +
+	cup_present(may).10
+
+3 = place_cup(must).2 +
+	cancelSoup(may).0
+
+8 = pour_tomato(must).11
+
+5 = place_cup(must).4 +
+	cancelSoup(may).0
+
+9 = pour_chicken(must).11
+
+7 = place_cup(must).6 +
+	cancelSoup(may).0
+
+10 = pour_pea(must).11
+
+11 = ring(may).12 +
+	skip(may).12
+
+12 = take_soup(must).0 +
+	bad_luck(may).0
+
+
+SYS = 0
+
+Constraints { LIVE }
+
