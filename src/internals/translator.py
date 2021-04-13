@@ -87,9 +87,9 @@ class Translator:
         if out_file:
             with open(out_file,'wb') as of:
                 of.write(svg_graph)
-
-    #SNIP
+    #SPIN
     def translate_to_pml(self):
+        print('BEGIN')
         act_state = '\nmtype action\n\nint state\n'
         mtype = 'mtype = {no_action'
         macros = '\n'
@@ -97,18 +97,21 @@ class Translator:
                ';\n    do\n'
         if self.__fts == None:
             return 'Nothing to show: no fts has been loaded'
+        labels = set()#set used in order to avoid repetitions
         for trans in self.__fts._transitions:
             pml_label = self.sanitize_label(trans._label) + '_action'
 
-            mtype += ', ' + pml_label
+            if not pml_label in labels:
+                labels.add(pml_label)
+                mtype += ', ' + pml_label
 
-            macros += '#define ' + trans._label.upper() + '(action =='+ pml_label  +')\n'
+                macros += '#define ' + pml_label.upper() + ' (action == '+ pml_label  +')\n'
 
-            init += '    ::state==' + trans._in._id + ' -> action = ' + pml_label + ';state = ' + \
-                    trans._out._id + ';\n'
+                init += '    ::state==' + trans._in._id + ' -> action = ' + pml_label + ';state = ' + \
+                        trans._out._id + ';\n'
         
         init += 'od;\n};\n'
 
-        mtype += '}\n'
-        print(mtype + act_state + macros + init)  
-        return mtype + act_state + macros + init 
+        mtype += '};\n'
+        print('END')
+        return mtype + act_state + macros + init
