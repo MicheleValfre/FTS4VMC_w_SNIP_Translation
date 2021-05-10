@@ -32,6 +32,7 @@ init{
     ::state==6 -> action = serveTea_action;state = 7;
     ::state==7 -> action = open_action;state = 8;
     ::state==7 -> action = take_action;state = 1;
+    ::state==8 -> action = take_action;state = 9;
     ::state==9 -> action = close_action;state = 1;
 od;
 };

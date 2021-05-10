@@ -32,10 +32,18 @@ init{
     ::state==2 -> action = coffee_action;state = 6;
     ::state==2 -> action = tea_action;state = 5;
     ::state==2 -> action = cappuccino_action;state = 4;
+    ::state==3 -> action = cappuccino_action;state = 9;
+    ::state==3 -> action = tea_action;state = 8;
+    ::state==3 -> action = coffee_action;state = 7;
     ::state==6 -> action = pour_sugar_action;state = 7;
+    ::state==5 -> action = pour_sugar_action;state = 8;
+    ::state==4 -> action = pour_sugar_action;state = 9;
     ::state==9 -> action = pour_milk_action;state = 11;
     ::state==9 -> action = pour_coffee_action;state = 10;
     ::state==8 -> action = pour_tea_action;state = 12;
+    ::state==7 -> action = pour_coffee_action;state = 12;
+    ::state==11 -> action = pour_coffee_action;state = 12;
+    ::state==10 -> action = pour_milk_action;state = 12;
     ::state==12 -> action = ring_action;state = 13;
     ::state==12 -> action = skip_action;state = 13;
     ::state==13 -> action = take_cup_action;state = 0;

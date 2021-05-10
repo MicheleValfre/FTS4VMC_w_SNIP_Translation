@@ -88,12 +88,16 @@ class Translator:
             with open(out_file,'wb') as of:
                 of.write(svg_graph)
     #SPIN
+    def remove_alpha(self,ident):
+        return ''.join(i for i in ident if i.isdigit())
+        
+
     def translate_to_pml(self):
         print('BEGIN')
         act_state = '\nmtype action\n\nint state\n'
         mtype = 'mtype = {no_action'
         macros = '\n'
-        init = '\ninit{\n    action=no_action;\n    state=' + self.__fts._initial._id + \
+        init = '\ninit{\n    action=no_action;\n    state=' + self.remove_alpha(self.__fts._initial._id) + \
                ';\n    do\n'
         if self.__fts == None:
             return 'Nothing to show: no fts has been loaded'
@@ -107,9 +111,10 @@ class Translator:
 
                 macros += '#define ' + pml_label.upper() + ' (action == '+ pml_label  +')\n'
 
-                init += '    ::state==' + trans._in._id + ' -> action = ' + pml_label + ';state = ' + \
-                        trans._out._id + ';\n'
-        
+                        
+            init += '    ::state==' + self.remove_alpha(trans._in._id) + ' -> action = ' + pml_label + ';state = ' + \
+                    self.remove_alpha(trans._out._id) + ';\n'
+
         init += 'od;\n};\n'
 
         mtype += '};\n'
