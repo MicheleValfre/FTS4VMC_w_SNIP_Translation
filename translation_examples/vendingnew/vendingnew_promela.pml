@@ -19,20 +19,33 @@ int state
 
 init{
     action=no_action;
-    state=1;
+    state=0;
     do
-    ::state==1 -> action = pay_action;state = 2;
-    ::state==1 -> action = free_action;state = 3;
-    ::state==2 -> action = change_action;state = 3;
-    ::state==3 -> action = cancel_action;state = 4;
-    ::state==3 -> action = soda_action;state = 5;
-    ::state==3 -> action = tea_action;state = 6;
-    ::state==4 -> action = return_action;state = 1;
-    ::state==5 -> action = serveSoda_action;state = 7;
-    ::state==6 -> action = serveTea_action;state = 7;
-    ::state==7 -> action = open_action;state = 8;
-    ::state==7 -> action = take_action;state = 1;
-    ::state==8 -> action = take_action;state = 9;
-    ::state==9 -> action = close_action;state = 1;
+    /*1 -> 2[pay]*/
+    ::state==0 -> action = pay_action;state = 1;
+    /*1 -> 3[free]*/
+    ::state==0 -> action = free_action;state = 2;
+    /*2 -> 3[change]*/
+    ::state==1 -> action = change_action;state = 2;
+    /*3 -> 4[cancel]*/
+    ::state==2 -> action = cancel_action;state = 3;
+    /*3 -> 5[soda]*/
+    ::state==2 -> action = soda_action;state = 4;
+    /*3 -> 6[tea]*/
+    ::state==2 -> action = tea_action;state = 5;
+    /*4 -> 1[return]*/
+    ::state==3 -> action = return_action;state = 0;
+    /*5 -> 7[serveSoda]*/
+    ::state==4 -> action = serveSoda_action;state = 6;
+    /*6 -> 7[serveTea]*/
+    ::state==5 -> action = serveTea_action;state = 6;
+    /*7 -> 8[open]*/
+    ::state==6 -> action = open_action;state = 7;
+    /*7 -> 1[take]*/
+    ::state==6 -> action = take_action;state = 0;
+    /*8 -> 9[take]*/
+    ::state==7 -> action = take_action;state = 8;
+    /*9 -> 1[close]*/
+    ::state==8 -> action = close_action;state = 0;
 od;
 };

@@ -88,19 +88,22 @@ class Translator:
             with open(out_file,'wb') as of:
                 of.write(svg_graph)
     #SPIN
-    def remove_alpha(self,ident):
-        return ''.join(i for i in ident if i.isdigit())
-        
 
     def translate_to_pml(self):
+        if self.__fts == None:
+            return 'Nothing to show: no fts has been loaded'
         print('BEGIN')
+        states_map = dict()
+        next_id = 0
         act_state = '\nmtype action\n\nint state\n'
         mtype = 'mtype = {no_action'
         macros = '\n'
-        init = '\ninit{\n    action=no_action;\n    state=' + self.remove_alpha(self.__fts._initial._id) + \
+        
+        states_map[self.__fts._initial._id] = next_id
+        init = '\ninit{\n    action=no_action;\n    state=' + str(next_id) + \
                ';\n    do\n'
-        if self.__fts == None:
-            return 'Nothing to show: no fts has been loaded'
+        next_id += 1
+
         labels = set()#set used in order to avoid repetitions
         for trans in self.__fts._transitions:
             pml_label = self.sanitize_label(trans._label) + '_action'
@@ -111,9 +114,28 @@ class Translator:
 
                 macros += '#define ' + pml_label.upper() + ' (action == '+ pml_label  +')\n'
 
-                        
-            init += '    ::state==' + self.remove_alpha(trans._in._id) + ' -> action = ' + pml_label + ';state = ' + \
-                    self.remove_alpha(trans._out._id) + ';\n'
+            init += '    /*' + trans._in._id + ' -> ' + trans._out._id + '[' + trans._label.strip() + ']' + '*/\n'
+
+            new_id_in = -1
+            
+            if trans._in._id in states_map:
+                new_id_in = states_map[trans._in._id]
+            else:
+                states_map[trans._in._id] = next_id
+                new_id_in = next_id
+                next_id += 1
+
+            new_id_out = -1
+           
+            if trans._out._id in states_map:
+                new_id_out = states_map[trans._out._id]
+            else:
+                states_map[trans._out._id] = next_id
+                new_id_out = next_id
+                next_id += 1
+
+            init += '    ::state==' + str(new_id_in) + ' -> action = ' + pml_label + ';state = ' + \
+                    str(new_id_out) + ';\n'
 
         init += 'od;\n};\n'
 

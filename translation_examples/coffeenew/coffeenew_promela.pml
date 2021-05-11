@@ -24,28 +24,51 @@ init{
     action=no_action;
     state=0;
     do
+    /*0 -> 1[insertBev(Euro)]*/
     ::state==0 -> action = insertBev_Euro__action;state = 1;
+    /*0 -> 1[insertBev(Dollar)]*/
     ::state==0 -> action = insertBev_Dollar__action;state = 1;
+    /*1 -> 0[cancelBev]*/
     ::state==1 -> action = cancelBev_action;state = 0;
+    /*1 -> 2[sugar]*/
     ::state==1 -> action = sugar_action;state = 2;
+    /*1 -> 3[no_sugar]*/
     ::state==1 -> action = no_sugar_action;state = 3;
-    ::state==2 -> action = coffee_action;state = 6;
+    /*2 -> 6[coffee]*/
+    ::state==2 -> action = coffee_action;state = 4;
+    /*2 -> 5[tea]*/
     ::state==2 -> action = tea_action;state = 5;
-    ::state==2 -> action = cappuccino_action;state = 4;
-    ::state==3 -> action = cappuccino_action;state = 9;
+    /*2 -> 4[cappuccino]*/
+    ::state==2 -> action = cappuccino_action;state = 6;
+    /*3 -> 9[cappuccino]*/
+    ::state==3 -> action = cappuccino_action;state = 7;
+    /*3 -> 8[tea]*/
     ::state==3 -> action = tea_action;state = 8;
-    ::state==3 -> action = coffee_action;state = 7;
-    ::state==6 -> action = pour_sugar_action;state = 7;
-    ::state==5 -> action = pour_sugar_action;state = 8;
+    /*3 -> 7[coffee]*/
+    ::state==3 -> action = coffee_action;state = 9;
+    /*6 -> 7[pour_sugar]*/
     ::state==4 -> action = pour_sugar_action;state = 9;
-    ::state==9 -> action = pour_milk_action;state = 11;
-    ::state==9 -> action = pour_coffee_action;state = 10;
+    /*5 -> 8[pour_sugar]*/
+    ::state==5 -> action = pour_sugar_action;state = 8;
+    /*4 -> 9[pour_sugar]*/
+    ::state==6 -> action = pour_sugar_action;state = 7;
+    /*9 -> 11[pour_milk]*/
+    ::state==7 -> action = pour_milk_action;state = 10;
+    /*9 -> 10[pour_coffee]*/
+    ::state==7 -> action = pour_coffee_action;state = 11;
+    /*8 -> 12[pour_tea]*/
     ::state==8 -> action = pour_tea_action;state = 12;
-    ::state==7 -> action = pour_coffee_action;state = 12;
-    ::state==11 -> action = pour_coffee_action;state = 12;
-    ::state==10 -> action = pour_milk_action;state = 12;
+    /*7 -> 12[pour_coffee]*/
+    ::state==9 -> action = pour_coffee_action;state = 12;
+    /*11 -> 12[pour_coffee]*/
+    ::state==10 -> action = pour_coffee_action;state = 12;
+    /*10 -> 12[pour_milk]*/
+    ::state==11 -> action = pour_milk_action;state = 12;
+    /*12 -> 13[ring]*/
     ::state==12 -> action = ring_action;state = 13;
+    /*12 -> 13[skip]*/
     ::state==12 -> action = skip_action;state = 13;
+    /*13 -> 0[take_cup]*/
     ::state==13 -> action = take_cup_action;state = 0;
 od;
 };
