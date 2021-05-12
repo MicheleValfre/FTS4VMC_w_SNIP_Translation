@@ -71,3 +71,40 @@ class TestTranslator:
                 vmc = VmcController(VMC_MAC)
             vmc.run_vmc(path, true)
             assert vmc.get_eval() == "TRUE"
+
+    def test_translation_pml(self, tmp_path, fixed_dot, true):
+        for source in fixed_dot:
+            t = Translator()
+            t.load_model(source)
+            pml = t.translate_to_pml()
+            pos = pml.find("init{")
+            init = pml[pos:]
+            st_map = dict()
+            l_state = ""
+            r_state = ""
+            for line in init.splitlines():
+                line = line.strip()
+                if(line[0:2] == '/*'):#Extracting states in .dot model
+                    left, right = line.split('->')
+
+                    l_state = ''.join(i for i in left if (i.isdigit() or i.isalpha()))
+
+                    r_state = right.rsplit("[")[0].strip()
+
+                elif(line[0:2] == '::'):#Extracting states in .pml model
+                    left, right = line.split('->')
+                    left = left.rsplit("==")[1].strip()
+                    right = ''.join(i for i in right.rsplit("state =")[1] if i.isdigit()).strip()
+
+                    if not l_state in st_map:
+                        st_map[l_state] = left
+                    else:
+                        assert st_map[l_state] == left
+
+                    if not r_state in st_map:
+                        st_map[r_state] = right
+                    else:
+                        assert st_map[r_state] == right
+                    l_state = ""
+                    r_state = ""
+
