@@ -84,7 +84,14 @@ class TestTranslator:
             r_state = ""
             for line in init.splitlines():
                 line = line.strip()
-                if(line[0:2] == '/*'):#Extracting states in .dot model
+                if len(line) == 0:
+                    pass
+                elif line == 'od;':
+                    break
+                elif(line[0:16] == "/*FINAL STATES*/"):
+                        break
+                elif(line[0:2] == '/*'):#Extracting states in .dot model
+                    
                     left, right = line.split('->')
 
                     l_state = ''.join(i for i in left if (i.isdigit() or i.isalpha()))
@@ -107,4 +114,24 @@ class TestTranslator:
                         assert st_map[r_state] == right
                     l_state = ""
                     r_state = ""
+            f_states = init.split("/*FINAL STATES*/")
+            if len(f_states) > 1:
+                for line in f_states[1].splitlines():
+                    line = line.strip()
+                    if len(line) == 0:
+                        pass
+                    elif line == 'od;':
+                        break
+                    elif(line[0:2] == '::'):
+                        line = line.strip()
+                        left, right = line.split('->')
 
+                        l_state = ''.join(i for i in left if (i.isdigit() or i.isalpha()))
+
+                        r_state = right.rsplit("[")[0].strip()
+                        if l_state in st_map:
+                            assert st_map[l_state] == left
+                        #if l_state not in st_map then it is an unreachable state.
+                        if r_state in st_map:
+                            assert st_map[r_state] == right
+                        #if r_state not in st_map then it is an unreachable state.

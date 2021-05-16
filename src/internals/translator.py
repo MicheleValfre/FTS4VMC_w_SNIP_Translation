@@ -92,12 +92,12 @@ class Translator:
     def translate_to_pml(self):
         if self.__fts == None:
             return 'Nothing to show: no fts has been loaded'
-        print('BEGIN')
         states_map = dict()
         next_id = 0
         act_state = '\nmtype action\n\nint state\n'
         mtype = 'mtype = {no_action'
         macros = '\n'
+        final = set()
         
         states_map[self.__fts._initial._id] = next_id
         init = '\ninit{\n    action=no_action;\n    state=' + str(next_id) + \
@@ -125,6 +125,9 @@ class Translator:
                 new_id_in = next_id
                 next_id += 1
 
+            if not trans._in._out:
+                final.add(states_map[trans._in._id])
+
             new_id_out = -1
            
             if trans._out._id in states_map:
@@ -134,11 +137,17 @@ class Translator:
                 new_id_out = next_id
                 next_id += 1
 
+            if not trans._out._out:
+                final.add(states_map[trans._out._id])
+
             init += '    ::state==' + str(new_id_in) + ' -> action = ' + pml_label + ';state = ' + \
                     str(new_id_out) + ';\n'
 
+        if final:
+            init += '\n    /*FINAL STATES*/\n'
+        for st in final:
+            init += '    ::state==' + str(st) + ' -> break;\n'
         init += 'od;\n};\n'
 
         mtype += '};\n'
-        print('END')
         return mtype + act_state + macros + init
